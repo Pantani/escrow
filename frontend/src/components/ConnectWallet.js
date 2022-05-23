@@ -1,6 +1,5 @@
 import React from "react";
 
-
 export function ConnectWallet({connectWallet}) {
     return (
         <div className="container">

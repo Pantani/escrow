@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Web3 from 'web3';
 import Actions from './Actions';
 import Deployment from './Deployment';
 import Verify from './Verify';

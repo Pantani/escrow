@@ -1,5 +1,13 @@
 import React, {Component} from 'react';
-import {buy} from '../contracts/send';
+import {
+    addMoreBalance,
+    buy,
+    changeValue,
+    confirmProduct,
+    refund,
+    sendProduct,
+    report
+} from '../contracts/send';
 
 class Actions extends Component {
     constructor(props) {
@@ -7,23 +15,27 @@ class Actions extends Component {
         this.state = {
             selectedAddress: this.props.selectedAddress,
             escrowAddress: '',
+            trackNumber: '',
             buyValue: 0,
-            addMoreValue: 0,
-            newValue: 0,
+            moreBalance: 0,
+            newEscrowValue: 0,
             transactions: [],
         }
-        this.buy = this.buy.bind(this);
-        this.confirmProduct = this.confirmProduct.bind(this);
-        this.sendProduct = this.sendProduct.bind(this);
-        this.refund = this.refund.bind(this);
+        this.buyEscrow = this.buyEscrow.bind(this);
+        this.changeEscrowValue = this.changeEscrowValue.bind(this);
+        this.addMoreEscrowBalance = this.addMoreEscrowBalance.bind(this);
+        this.confirmEscrowProduct = this.confirmEscrowProduct.bind(this);
+        this.sendEscrowProduct = this.sendEscrowProduct.bind(this);
+        this.refundEscrow = this.refundEscrow.bind(this);
+        this.reportEscrow = this.reportEscrow.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
-    buy() {
+    buyEscrow() {
         const {escrowAddress, selectedAddress, buyValue} = this.state;
         buy(escrowAddress, selectedAddress, buyValue).then((receipt) => {
             this.setState({
-                transactions: this.state.transactions.concat(`Buy successful at ${receipt.hash}.`)
+                transactions: this.state.transactions.concat(`Buy successful at ${receipt.transactionHash}.`)
             });
         }).catch((err) => {
             this.setState({
@@ -32,22 +44,83 @@ class Actions extends Component {
         });
     }
 
-    changeValue() {
+    changeEscrowValue() {
+        const {escrowAddress, selectedAddress, newEscrowValue} = this.state;
+        changeValue(escrowAddress, selectedAddress, newEscrowValue).then((receipt) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Change value successful at ${receipt.transactionHash}.`)
+            });
+        }).catch((err) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Change value unsuccessful for Escrow at ${escrowAddress}: ${err.message}`)
+            });
+        });
     }
 
-    addMoreBalance() {
+    addMoreEscrowBalance() {
+        const {escrowAddress, selectedAddress, moreBalance} = this.state;
+        addMoreBalance(escrowAddress, selectedAddress, moreBalance).then((receipt) => {
+            console.log(receipt);
+            this.setState({
+                transactions: this.state.transactions.concat(`Add more balance successful at ${receipt.transactionHash}.`)
+            });
+        }).catch((err) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Add more balance unsuccessful for Escrow at ${escrowAddress}: ${err.message}`)
+            });
+        });
     }
 
-    confirmProduct() {
+    confirmEscrowProduct() {
+        const {escrowAddress, selectedAddress} = this.state;
+        confirmProduct(escrowAddress, selectedAddress).then((receipt) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Confirm product successful at ${receipt.transactionHash}.`)
+            });
+        }).catch((err) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Confirm product unsuccessful for Escrow at ${escrowAddress}: ${err.message}`)
+            });
+        });
     }
 
-    sendProduct() {
+    sendEscrowProduct() {
+        const {escrowAddress, selectedAddress, trackNumber} = this.state;
+        sendProduct(escrowAddress, selectedAddress, trackNumber).then((receipt) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Send product successful at ${receipt.transactionHash}.`)
+            });
+        }).catch((err) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Send product unsuccessful for Escrow at ${escrowAddress}: ${err.message}`)
+            });
+        });
     }
 
-    paySeller() {
+    refundEscrow() {
+        const {escrowAddress, selectedAddress} = this.state;
+        refund(escrowAddress, selectedAddress).then((receipt) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Refund successful at ${receipt.transactionHash}.`)
+            });
+        }).catch((err) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Refund unsuccessful for Escrow at ${escrowAddress}: ${err.message}`)
+            });
+        });
     }
 
-    refund() {
+    reportEscrow() {
+        const {escrowAddress, selectedAddress} = this.state;
+        report(escrowAddress, selectedAddress).then((receipt) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Report successful at ${receipt.transactionHash}.`)
+            });
+        }).catch((err) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Report unsuccessful for Escrow at ${escrowAddress}: ${err.message}`)
+            });
+        });
     }
 
     handleChange(prop) {
@@ -55,7 +128,7 @@ class Actions extends Component {
     }
 
     render() {
-        const {buyValue, addMoreValue, newValue, escrowAddress, transactions} = this.state;
+        const {buyValue, moreBalance, newEscrowValue, trackNumber, escrowAddress, transactions} = this.state;
         return (
             <div className="container py-3 px-4 my-3 border">
                 <h1> Escrow Actions </h1>
@@ -64,36 +137,46 @@ class Actions extends Component {
                 </p>
                 <form>
                     <div className="form-group">
-                        <label htmlFor="beneficiary">Escrow Address
+                        <label>Escrow Address
                             <input type="text" className="form-control" id="escrow" placeholder="Contract Address"
                                    value={escrowAddress} onChange={this.handleChange('escrowAddress')}/>
                         </label>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="beneficiary">Change Escrow Value:
-                            <input type="number" className="form-control" id="changeValue" placeholder="Value"
-                                   value={newValue} onChange={this.handleChange('changeValue')}/>
+                        <label>Change Escrow Value:
+                            <input type="number" className="form-control" id="newEscrowValue" placeholder="Value"
+                                   value={newEscrowValue} onChange={this.handleChange('newEscrowValue')}/>
                         </label>
-                        <div className="btn btn-primary m-sm-1" onClick={this.changeValue}>Change Value</div>
+                        <div className="btn btn-primary m-sm-1" onClick={this.changeEscrowValue}>Change Value</div>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="beneficiary">Buy:
+                        <label>Buy:
                             <input type="number" className="form-control" id="buyValue" placeholder="Value"
                                    value={buyValue} onChange={this.handleChange('buyValue')}/>
                         </label>
-                        <div className="btn btn-primary m-sm-1" onClick={this.buy}>Buy</div>
+                        <div className="btn btn-primary m-sm-1" onClick={this.buyEscrow}>Buy</div>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="beneficiary">Add More Balance:
-                            <input type="number" className="form-control" id="addMoreBalance" placeholder="Value"
-                                   value={addMoreValue} onChange={this.handleChange('addMoreBalance')}/>
+                        <label>Add More Balance:
+                            <input type="number" className="form-control" id="moreBalance" placeholder="Value"
+                                   value={moreBalance} onChange={this.handleChange('moreBalance')}/>
                         </label>
-                        <div className="btn btn-primary m-sm-1" onClick={this.addMoreBalance}>Add More Balance</div>
+                        <div className="btn btn-primary m-sm-1" onClick={this.addMoreEscrowBalance}>Add More Balance
+                        </div>
                     </div>
-                    <div className="btn btn-primary m-sm-1" onClick={this.sendProduct}>Send Product</div>
-                    <div className="btn btn-primary m-sm-1" onClick={this.confirmProduct}>Confirm Product</div>
-                    <div className="btn btn-primary m-sm-1" onClick={this.paySeller}>Pay Seller</div>
-                    <div className="btn btn-primary m-sm-1" onClick={this.refund}>Refund</div>
+                    <div className="form-group">
+                        <label>Track Number:
+                            <input type="text" className="form-control" id="trackNumber" placeholder="Track Number"
+                                   value={trackNumber} onChange={this.handleChange('trackNumber')}/>
+                        </label>
+                        <div className="btn btn-primary m-sm-1" onClick={this.sendEscrowProduct}>Send Product</div>
+                    </div>
+                    <div className="form-group">
+                        <div className="btn btn-primary m-sm-1" onClick={this.confirmEscrowProduct}>Confirm Product
+                        </div>
+                        <div className="btn btn-danger m-sm-1" onClick={this.refundEscrow}>Refund</div>
+                        <div className="btn btn-danger m-sm-1" onClick={this.reportEscrow}>Report</div>
+                    </div>
                 </form>
                 <ul className="list-group py-2">
                     {
