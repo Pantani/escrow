@@ -1,7 +1,5 @@
 import Escrow from './Escrow.json';
-import {web3} from './web3Util.js';
-
-const EscrowContract = new web3.eth.Contract(Escrow.abi);
+import {EscrowContract} from './web3Util.js';
 
 const deploy = (value, depositorAddress) => {
     const deployParameters = {

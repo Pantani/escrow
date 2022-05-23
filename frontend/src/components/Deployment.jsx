@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import deploy from '../contracts/deploy';
-import {web3} from '../contracts/web3Util';
 
 class Deployment extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            selectedAddress: props.selectedAddress,
             ether: '',
             transactions: [],
         }
@@ -14,22 +14,17 @@ class Deployment extends Component {
     }
 
     deploy() {
-        const {ether} = this.state;
-        web3.eth.getAccounts().then((accounts) => {
-            let account = accounts[0];
-            if (account) {
-                deploy(+ether, account).then(({options}) => {
-                    const {address} = options;
-                    this.setState({
-                        transactions: this.state.transactions.concat(`Transaction was successful! Deployed to ${address}.`)
-                    });
-                }).catch((err) => {
-                    this.setState({
-                        transactions: this.state.transactions.concat(`Deployment Failed: ${err.message}`)
-                    });
-                });
-            }
-        })
+        const {ether, selectedAddress} = this.state;
+        deploy(+ether, selectedAddress).then(({options}) => {
+            const {address} = options;
+            this.setState({
+                transactions: this.state.transactions.concat(`Transaction was successful! Deployed to ${address}.`)
+            });
+        }).catch((err) => {
+            this.setState({
+                transactions: this.state.transactions.concat(`Deployment Failed: ${err.message}`)
+            });
+        });
     }
 
     handleChange(prop) {

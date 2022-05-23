@@ -21,7 +21,6 @@ class Dapp extends Component {
 
     async connectWallet() {
         const [selectedAddress] = await window.ethereum.request({method: 'eth_requestAccounts'});
-
         this.initialize(selectedAddress);
 
         window.ethereum.on("accountsChanged", ([newAddress]) => {
@@ -39,12 +38,6 @@ class Dapp extends Component {
         this.setState({
             selectedAddress: userAddress,
         });
-        this.initializeWeb3();
-    }
-
-    async initializeWeb3() {
-        const provider = window.ethereum.currentProvider;
-        this.provider = new Web3(provider);
     }
 
     render() {
@@ -52,7 +45,8 @@ class Dapp extends Component {
             return <NoWalletDetected/>;
         }
 
-        if (!this.state.selectedAddress) {
+        const {selectedAddress} = this.state;
+        if (!selectedAddress) {
             return (
                 <ConnectWallet
                     connectWallet={() => this.connectWallet()}
@@ -62,9 +56,9 @@ class Dapp extends Component {
 
         return (
             <React.Fragment>
-                <Deployment/>
-                <Verify/>
-                <Actions/>
+                <Deployment selectedAddress={selectedAddress}/>
+                <Verify selectedAddress={selectedAddress}/>
+                <Actions selectedAddress={selectedAddress}/>
             </React.Fragment>
         );
     }

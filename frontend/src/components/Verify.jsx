@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import getData from '../contracts/verify';
-import {web3} from "../contracts/web3Util";
 
 class Verify extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            selectedAddress: this.props.selectedAddress,
             escrowAddress: '',
             buyer: '',
             seller: '',
@@ -21,40 +21,34 @@ class Verify extends Component {
     }
 
     verify() {
-        const {escrowAddress} = this.state;
+        const {escrowAddress, selectedAddress} = this.state;
+        getData(escrowAddress, selectedAddress).then((data) => {
+            const {
+                buyer,
+                seller,
+                startDate,
+                buyDate,
+                value,
+                balance,
+                buyerOk,
+                sellerOk,
+                trackNumber
+            } = data;
 
-        web3.eth.getAccounts().then((accounts) => {
-            let account = accounts[0];
-            if (account) {
-                getData(escrowAddress, account).then((data) => {
-                    const {
-                        buyer,
-                        seller,
-                        startDate,
-                        buyDate,
-                        value,
-                        balance,
-                        buyerOk,
-                        sellerOk,
-                        trackNumber
-                    } = data;
-
-                    this.setState({
-                        buyer: buyer,
-                        seller: seller,
-                        startDate: startDate,
-                        buyDate: buyDate,
-                        value: value,
-                        balance: balance,
-                        buyerOk: buyerOk,
-                        sellerOk: sellerOk,
-                        trackNumber: trackNumber,
-                    });
-                }).catch((err) => {
-                    alert(err.message);
-                });
-            }
-        })
+            this.setState({
+                buyer: buyer,
+                seller: seller,
+                startDate: startDate,
+                buyDate: buyDate,
+                value: value,
+                balance: balance,
+                buyerOk: buyerOk,
+                sellerOk: sellerOk,
+                trackNumber: trackNumber,
+            });
+        }).catch((err) => {
+            alert(err.message);
+        });
     }
 
     handleChange(prop) {

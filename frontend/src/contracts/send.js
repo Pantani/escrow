@@ -1,14 +1,44 @@
-import Escrow from './Escrow.json';
-import { web3 } from './web3Util.js';
+import {EscrowContract} from './web3Util.js';
 
-const EscrowContract = new web3.eth.Contract(Escrow.abi);
-
-const send = (escrowContractAddress, method, address) => {
-  EscrowContract.options.address = escrowContractAddress;
-  return EscrowContract.methods[method]().send({
-    from: address
-  })
+const buy = (escrowContractAddress, address, amount) => {
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.buy().send({from: address, value: amount})
 }
 
-export default send;
+const addMoreBalance = (escrowContractAddress, address, amount) => {
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.addMoreBalance().send({from: address, value: amount})
+}
+
+const changeValue = (escrowContractAddress, address, newValue) => {
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.changeValue(newValue).send({from: address})
+}
+
+const sendProduct = (escrowContractAddress, address, trackNumber) => {
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.sendProduct(trackNumber).send({from: address})
+}
+
+const confirmProduct = (escrowContractAddress, address) => {
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.confirmProduct().send({from: address})
+}
+
+const paySeller = (escrowContractAddress, address) => {
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.paySeller().send({from: address})
+}
+
+const refund = (escrowContractAddress, address) => {
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.refund().send({from: address})
+}
+
+const report = (escrowContractAddress, address) => {
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.report().send({from: address})
+}
+
+export {buy, addMoreBalance, changeValue, sendProduct, confirmProduct, paySeller, refund, report};
 
