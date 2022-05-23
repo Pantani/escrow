@@ -1,7 +1,7 @@
 import React from "react";
 
 
-export function ConnectWallet({connectWallet, networkError, dismiss}) {
+export function ConnectWallet({connectWallet}) {
     return (
         <div className="container">
             <div className="row justify-content-md-center">

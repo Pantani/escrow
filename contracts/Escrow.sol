@@ -120,7 +120,7 @@ contract Escrow {
     // Função que o vendedor avisa que o produto já foi enviado.
     function sendProduct(string memory _trackNumber) public available onlySeller {
         require(balance >= value, "Saldo deve ser maior que o valor do escrow");
-        sellerOk = true // Adiciona status ok para o vendedor.
+        sellerOk = true; // Adiciona status ok para o vendedor.
         trackNumber = _trackNumber; // Salva o numero de entrega
         emit Sent(); // Emite um evento que o produto foi enviado.
     }

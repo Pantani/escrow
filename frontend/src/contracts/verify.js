@@ -3,38 +3,41 @@ import {web3} from './web3Util.js';
 
 const EscrowContract = new web3.eth.Contract(Escrow.abi);
 
-const call = (escrowContractAddress, method, address) => {
+const buyer = (escrowContractAddress) => {
     EscrowContract.options.address = escrowContractAddress;
-    return EscrowContract.methods[method]().call({
-        from: address
-    })
-}
-const buyer = (escrowContractAddress, address) => {
-    return call(escrowContractAddress, 'buyer', address)
+    return EscrowContract.methods.buyer().call()
 }
 const seller = (escrowContractAddress, address) => {
-    return call(escrowContractAddress, 'seller', address)
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.seller().call()
 }
 const startDate = (escrowContractAddress, address) => {
-    return call(escrowContractAddress, 'startDate', address)
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.startDate().call()
 }
 const buyDate = (escrowContractAddress, address) => {
-    return call(escrowContractAddress, 'buyDate', address)
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.buyDate().call()
 }
 const getValue = (escrowContractAddress, address) => {
-    return call(escrowContractAddress, 'getValue', address)
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.getValue().call()
 }
 const balance = (escrowContractAddress, address) => {
-    return call(escrowContractAddress, 'balance', address)
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.balance().call()
 }
 const buyerOk = (escrowContractAddress, address) => {
-    return call(escrowContractAddress, 'buyerOk', address)
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.buyerOk().call()
 }
 const sellerOk = (escrowContractAddress, address) => {
-    return call(escrowContractAddress, 'sellerOk', address)
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.sellerOk().call()
 }
 const trackNumber = (escrowContractAddress, address) => {
-    return call(escrowContractAddress, 'trackNumber', address)
+    EscrowContract.options.address = escrowContractAddress;
+    return EscrowContract.methods.trackNumber().call()
 }
 
 const getData = async (escrowContractAddress, address) => {

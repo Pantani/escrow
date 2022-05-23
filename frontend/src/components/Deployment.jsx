@@ -15,24 +15,21 @@ class Deployment extends Component {
 
     deploy() {
         const {ether} = this.state;
-        if (web3) {
-            web3.eth.getAccounts().then((accounts) => {
-                let account = accounts[0];
-                if (account) {
-                    deploy(+ether, account).then(({options}) => {
-                        const {address} = options;
-                        this.setState({
-                            transactions: this.state.transactions.concat(`Transaction was successful! Deployed to ${address}.`)
-                        });
-                    }).catch((err) => {
-                        this.setState({
-                            transactions: this.state.transactions.concat(`Deployment Failed.`)
-                        });
-                        alert(err);
+        web3.eth.getAccounts().then((accounts) => {
+            let account = accounts[0];
+            if (account) {
+                deploy(+ether, account).then(({options}) => {
+                    const {address} = options;
+                    this.setState({
+                        transactions: this.state.transactions.concat(`Transaction was successful! Deployed to ${address}.`)
                     });
-                }
-            })
-        }
+                }).catch((err) => {
+                    this.setState({
+                        transactions: this.state.transactions.concat(`Deployment Failed: ${err.message}`)
+                    });
+                });
+            }
+        })
     }
 
     handleChange(prop) {

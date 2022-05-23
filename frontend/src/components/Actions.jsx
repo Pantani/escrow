@@ -20,35 +20,35 @@ class Actions extends Component {
     buy() {
         this.sendTx('buy')
     }
+
     confirmProduct() {
         this.sendTx('confirmProduct')
     }
+
     sendProduct() {
         this.sendTx('sendProduct')
     }
+
     refund() {
         this.sendTx('refund')
     }
 
     sendTx(method) {
         const {escrowAddress} = this.state;
-        if (web3) {
-            web3.eth.getAccounts().then((accounts) => {
-                let account = accounts[0];
-                if (account) {
-                    send(escrowAddress, method, account).then(() => {
-                        this.setState({
-                          transactions: this.state.transactions.concat(`Action ${method} successful for Escrow at ${escrowAddress}.`)
-                        });
-                    }).catch((err) => {
-                        this.setState({
-                          transactions: this.state.transactions.concat(`Action ${method} unsuccessful for Escrow at ${escrowAddress}.`)
-                        });
-                        alert(err);
+        web3.eth.getAccounts().then((accounts) => {
+            let account = accounts[0];
+            if (account) {
+                send(escrowAddress, method, account).then(() => {
+                    this.setState({
+                        transactions: this.state.transactions.concat(`Action ${method} successful for Escrow at ${escrowAddress}.`)
                     });
-                }
-            })
-        }
+                }).catch((err) => {
+                    this.setState({
+                        transactions: this.state.transactions.concat(`Action ${method} unsuccessful for Escrow at ${escrowAddress}: ${err.message}`)
+                    });
+                });
+            }
+        })
     }
 
     handleChange(prop) {

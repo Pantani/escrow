@@ -30,7 +30,7 @@ class Dapp extends Component {
             }
             this.initialize(newAddress);
         });
-        window.ethereum.on("chainChanged", ([networkId]) => {
+        window.ethereum.on("chainChanged", () => {
             this.resetState();
         });
     }
