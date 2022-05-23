@@ -15,6 +15,7 @@ class Verify extends Component {
             balance: 0,
             buyerOk: false,
             sellerOk: false,
+            trackNumber: '',
         }
         this.verify = this.verify.bind(this);
     }
@@ -35,7 +36,8 @@ class Verify extends Component {
                             value,
                             balance,
                             buyerOk,
-                            sellerOk
+                            sellerOk,
+                            trackNumber
                         } = data;
 
                         this.setState({
@@ -47,6 +49,7 @@ class Verify extends Component {
                             balance: balance,
                             buyerOk: buyerOk,
                             sellerOk: sellerOk,
+                            trackNumber: trackNumber,
                         });
                     }).catch((err) => {
                         alert(err);
@@ -106,6 +109,9 @@ class Verify extends Component {
                             </li>
                             <li>
                                 sellerOk: {this.state.sellerOk}
+                            </li>
+                            <li>
+                                trackNumber: {this.state.trackNumber}
                             </li>
                         </ul>
                     </div>

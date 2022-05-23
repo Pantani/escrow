@@ -33,6 +33,9 @@ const buyerOk = (escrowContractAddress, address) => {
 const sellerOk = (escrowContractAddress, address) => {
     return call(escrowContractAddress, 'sellerOk', address)
 }
+const trackNumber = (escrowContractAddress, address) => {
+    return call(escrowContractAddress, 'trackNumber', address)
+}
 
 const getData = async (escrowContractAddress, address) => {
     return {
@@ -44,6 +47,7 @@ const getData = async (escrowContractAddress, address) => {
         balance: await balance(escrowContractAddress, address),
         buyerOk: await buyerOk(escrowContractAddress, address),
         sellerOk: await sellerOk(escrowContractAddress, address),
+        trackNumber: await trackNumber(escrowContractAddress, address),
     }
 }
 
