@@ -97,10 +97,10 @@ class Verify extends Component {
                                 balance: {this.state.balance}
                             </li>
                             <li>
-                                buyerOk: {this.state.buyerOk}
+                                buyerOk: {this.state.buyerOk.toString()}
                             </li>
                             <li>
-                                sellerOk: {this.state.sellerOk}
+                                sellerOk: {this.state.sellerOk.toString()}
                             </li>
                             <li>
                                 trackNumber: {this.state.trackNumber}
